@@ -48,8 +48,7 @@ public class DocCommand implements CommandExecutor, TabCompleter {
         }
 
         target = Bukkit.getPlayer(args[1]);
-        veicolo = args[2];
-        punti = Integer.parseInt(args[2]);
+
 
         Enum.DocumentType documentType;
         try {
@@ -61,12 +60,15 @@ public class DocCommand implements CommandExecutor, TabCompleter {
 
         switch (documentType) {
             case PATENTE:
+                punti = Integer.parseInt(args[2]);
                 handlePatente(p, target, punti, meta, libro);
                 break;
             case LIBRETTO:
+                veicolo = args[2].toString();
                 handleLibretto(p, target, veicolo, meta, libro);
                 break;
             case ASSICURAZIONE:
+                veicolo = args[2].toString();
                 handleAssicurazione(p, target, veicolo, meta, libro);
                 break;
         }
