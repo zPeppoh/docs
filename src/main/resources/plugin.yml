@@ -1,0 +1,7 @@
+name: docs
+version: '${project.version}'
+main: it.zpeppoh.docs.Docs
+api-version: '1.16'
+commands:
+  doc:
+    description: "Stampa un documento ad un giocatore"
