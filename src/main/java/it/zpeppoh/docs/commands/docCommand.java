@@ -1,5 +1,6 @@
 package it.zpeppoh.docs.commands;
 
+import it.zpeppoh.docs.enums.Enum;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
@@ -46,63 +47,83 @@ public class docCommand implements CommandExecutor {
         veicolo = args[2];
         punti = Integer.parseInt(args[2]);
 
-        switch (args[0].toLowerCase()) {
-            case "patente":
-                if (p.hasPermission("doc.emetti.patente")) {
-                    if (target.isOnline()) {
-                        p.sendMessage(utils.cc("&aHai rilasciato la patente a " + target.getName().toString() + " con successo."));
-                        target.sendMessage(utils.cc("&aHai ricevuto la patente"));
-                        meta.setTitle(cc("&aPatente di &2" + target.getName()));
-                        meta.setAuthor(cc("&2Scuola Guida"));
-                        meta.setPages(cc("&8-------------------\n&2        Patente\n&8-------------------\n\n&2Rilasciata a: &a\n " + target.getName() + "\n\n &2Punti: &a\n " + punti + "\n\n&2Data: &a\n " + utils.formatDate(LocalDateTime.now())));
-                        meta.addPages(Component.text("\n\nNon smarrire questo documento o potresti essere multato.").color(TextColor.color(255, 20, 0)));
-                        libro.setItemMeta(meta);
-                        p.getInventory().addItem(libro);
-                    } else {
-                        p.sendMessage(utils.cc("&cIl giocatore non è online"));
-                    }
-                } else {
-                    p.sendMessage(utils.cc("&cNon hai il permesso!"));
-                } break;
-            case "libretto":
-                if (p.hasPermission("doc.emetti.libretto")) {
-                    if (target.isOnline()) {
-                        p.sendMessage(utils.cc("&aHai creato un libretto a " + target.getName().toString() + " con successo."));
-                        target.sendMessage(utils.cc("&aHai ricevuto il libretto"));
-                        meta.setTitle(cc("&aLibretto di &2" + target.getName()));
-                        meta.setAuthor(cc("&2Concessionaria"));
-                        meta.setPages(cc("&8-------------------\n&2        Libretto\n&8-------------------\n\n&2Rilasciato a: &a\n " + target.getName() + "\n\n&2Veicolo: &a\n " + veicolo + "\n\n&2Data: &a\n " + utils.formatDate(LocalDateTime.now())));
-                        meta.addPages(Component.text("\n\nNon smarrire questo libro o potresti essere multato.").color(TextColor.color(255, 20, 0)));
-                        libro.setItemMeta(meta);
-                        p.getInventory().addItem(libro);
-                    } else {
-                        p.sendMessage(utils.cc("&cIl giocatore non è online"));
-                    }
-                } else {
-                    p.sendMessage(utils.cc("&cNon hai il permesso!"));
-                } break;
-            case "assicurazione":
-                if (p.hasPermission("doc.emetti.assicurazione")) {
-                    if (target.isOnline()) {
-                        p.sendMessage(utils.cc("&aHai creato un'assicurazione a " + target.getName().toString() + " con successo."));
-                        target.sendMessage(utils.cc("&aHai ricevuto l'assicurazione"));
-                        meta.setTitle(cc("&aAssicurazione di &2" + target.getName()));
-                        meta.setAuthor(cc("&2Concessionaria"));
-                        meta.setPages(cc("&8-------------------\n&2        Assicurazione\n&8-------------------\n\n&2Rilasciata a: &a\n " + target.getName() + "\n\n&2Veicolo: &a\n " + veicolo + "\n\n&2Data: &a\n " + utils.formatDate(LocalDateTime.now())));
-                        meta.addPages(Component.text("\n\nNon smarrire questo libro o potresti essere multato.").color(TextColor.color(255, 20, 0)));
-                        libro.setItemMeta(meta);
-                        p.getInventory().addItem(libro);
-                    } else {
-                        p.sendMessage(utils.cc("&cIl giocatore non è online"));
-                    }
-                } else {
-                    p.sendMessage(utils.cc("&cNon hai il permesso!"));
-                } break;
-            default:
-                p.sendMessage(utils.cc("&cUtilizzo Corretto: /doc <patente/libretto/assicurazione> <player> <nomeveicolo/puntipatente>"));
-                return true;
+        Enum.DocumentType documentType;
+        try {
+            documentType = Enum.DocumentType.valueOf(args[0].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            p.sendMessage(utils.cc("&cUtilizzo corretto: /doc <patente/libretto/assicurazione> <player> <nomeveicolo/puntipatente>"));
+            return true;
+        }
+
+        switch (documentType) {
+            case PATENTE:
+                handlePatente(p, target, punti, meta, libro);
+                break;
+            case LIBRETTO:
+                handleLibretto(p, target, veicolo, meta, libro);
+                break;
+            case ASSICURAZIONE:
+                handleAssicurazione(p, target, veicolo, meta, libro);
+                break;
         }
         return false;
+    }
+
+    private void handlePatente(Player p, Player target, int punti, BookMeta meta, ItemStack libro) {
+        if (p.hasPermission("doc.emetti.patente")) {
+            if (target.isOnline()) {
+                p.sendMessage(utils.cc("&aHai rilasciato la patente a " + target.getName().toString() + " con successo."));
+                target.sendMessage(utils.cc("&aHai ricevuto la patente"));
+                meta.setTitle(cc("&aPatente di &2" + target.getName()));
+                meta.setAuthor(cc("&2Scuola Guida"));
+                meta.setPages(cc("&8-------------------\n&2        Patente\n&8-------------------\n\n&2Rilasciata a: &a\n " + target.getName() + "\n\n &2Punti: &a\n " + punti + "\n\n&2Data: &a\n " + utils.formatDate(LocalDateTime.now())));
+                meta.addPages(Component.text("\n\nNon smarrire questo documento o potresti essere multato.").color(TextColor.color(255, 20, 0)));
+                libro.setItemMeta(meta);
+                p.getInventory().addItem(libro);
+            } else {
+                p.sendMessage(utils.cc("&cIl giocatore non è online"));
+            }
+        } else {
+            p.sendMessage(utils.cc("&cNon hai il permesso!"));
+        }
+    }
+
+    private void handleLibretto(Player p, Player target, String veicolo, BookMeta meta, ItemStack libro) {
+        if (p.hasPermission("doc.emetti.libretto")) {
+            if (target.isOnline()) {
+                p.sendMessage(utils.cc("&aHai creato un libretto a " + target.getName().toString() + " con successo."));
+                target.sendMessage(utils.cc("&aHai ricevuto il libretto"));
+                meta.setTitle(cc("&aLibretto di &2" + target.getName()));
+                meta.setAuthor(cc("&2Concessionaria"));
+                meta.setPages(cc("&8-------------------\n&2        Libretto\n&8-------------------\n\n&2Rilasciato a: &a\n " + target.getName() + "\n\n&2Veicolo: &a\n " + veicolo + "\n\n&2Data: &a\n " + utils.formatDate(LocalDateTime.now())));
+                meta.addPages(Component.text("\n\nNon smarrire questo libro o potresti essere multato.").color(TextColor.color(255, 20, 0)));
+                libro.setItemMeta(meta);
+                p.getInventory().addItem(libro);
+            } else {
+                p.sendMessage(utils.cc("&cIl giocatore non è online"));
+            }
+        } else {
+            p.sendMessage(utils.cc("&cNon hai il permesso!"));
+        }
+    }
+
+    private void handleAssicurazione(Player p, Player target, String veicolo, BookMeta meta, ItemStack libro) {
+        if (p.hasPermission("doc.emetti.assicurazione")) {
+            if (target.isOnline()) {
+                p.sendMessage(utils.cc("&aHai creato un'assicurazione a " + target.getName().toString() + " con successo."));
+                target.sendMessage(utils.cc("&aHai ricevuto l'assicurazione"));
+                meta.setTitle(cc("&aAssicurazione di &2" + target.getName()));
+                meta.setAuthor(cc("&2Concessionaria"));
+                meta.setPages(cc("&8-------------------\n&2        Assicurazione\n&8-------------------\n\n&2Rilasciata a: &a\n " + target.getName() + "\n\n&2Veicolo: &a\n " + veicolo + "\n\n&2Data: &a\n " + utils.formatDate(LocalDateTime.now())));
+                meta.addPages(Component.text("\n\nNon smarrire questo libro o potresti essere multato.").color(TextColor.color(255, 20, 0)));
+                libro.setItemMeta(meta);
+                p.getInventory().addItem(libro);
+            } else {
+                p.sendMessage(utils.cc("&cIl giocatore non è online"));
+            }
+        } else {
+            p.sendMessage(utils.cc("&cNon hai il permesso!"));
+        }
     }
 
     @Nullable
