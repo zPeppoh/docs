@@ -1,0 +1,7 @@
+# docs made by github.com/zPeppoh
+
+permissions:
+  emetti: "docs.emetti"
+  patente: "docs.emetti.patente"
+  libretto: "docs.emetti.libretto"
+  assicurazione: "docs.emetti.assicurazione"
