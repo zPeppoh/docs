@@ -90,7 +90,7 @@ public class docCommand implements CommandExecutor {
     }
 
     private void handleLibretto(Player p, Player target, String veicolo, BookMeta meta, ItemStack libro) {
-        if (p.hasPermission(Docs.getInstance().getConfig().getString("permissions.libretto))) {
+        if (p.hasPermission(Docs.getInstance().getConfig().getString("permissions.libretto"))) {
             if (target.isOnline()) {
                 p.sendMessage(utils.cc("&aHai creato un libretto a " + target.getName().toString() + " con successo."));
                 target.sendMessage(utils.cc("&aHai ricevuto il libretto"));
