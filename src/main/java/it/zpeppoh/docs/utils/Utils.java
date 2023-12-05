@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class utils {
+public class Utils {
     public static String cc(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
     }
