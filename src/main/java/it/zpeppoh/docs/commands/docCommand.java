@@ -145,6 +145,16 @@ public class docCommand implements CommandExecutor, TabCompleter {
             completions.add("patente");
             completions.add("libretto");
             completions.add("assicurazione");
+        } else if (args.length == 3) {
+            if (args[0].contains("patente")) {
+                completions.add("30");
+            } else {
+                completions.add("NomeVeicolo");
+            }
+        } else {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                completions.add(onlinePlayer.getName());
+            }
         }
         return completions;
     }
