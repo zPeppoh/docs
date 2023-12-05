@@ -1,5 +1,6 @@
 package it.zpeppoh.docs.commands;
 
+import it.zpeppoh.docs.Docs;
 import it.zpeppoh.docs.enums.Enum;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -33,7 +34,7 @@ public class docCommand implements CommandExecutor {
 
         Player p = (Player) sender;
 
-        if (!p.hasPermission("docs.emetti")) {
+        if (!p.hasPermission(Docs.getInstance().getConfig().getString("permissions.emetti"))) {
             p.sendMessage(utils.cc("&cNon hai il permesso!"));
             return true;
         }
@@ -70,7 +71,7 @@ public class docCommand implements CommandExecutor {
     }
 
     private void handlePatente(Player p, Player target, int punti, BookMeta meta, ItemStack libro) {
-        if (p.hasPermission("doc.emetti.patente")) {
+        if (p.hasPermission(Docs.getInstance().getConfig().getString("permissions.patente"))) {
             if (target.isOnline()) {
                 p.sendMessage(utils.cc("&aHai rilasciato la patente a " + target.getName().toString() + " con successo."));
                 target.sendMessage(utils.cc("&aHai ricevuto la patente"));
@@ -89,7 +90,7 @@ public class docCommand implements CommandExecutor {
     }
 
     private void handleLibretto(Player p, Player target, String veicolo, BookMeta meta, ItemStack libro) {
-        if (p.hasPermission("doc.emetti.libretto")) {
+        if (p.hasPermission(Docs.getInstance().getConfig().getString("permissions.libretto))) {
             if (target.isOnline()) {
                 p.sendMessage(utils.cc("&aHai creato un libretto a " + target.getName().toString() + " con successo."));
                 target.sendMessage(utils.cc("&aHai ricevuto il libretto"));
@@ -108,7 +109,7 @@ public class docCommand implements CommandExecutor {
     }
 
     private void handleAssicurazione(Player p, Player target, String veicolo, BookMeta meta, ItemStack libro) {
-        if (p.hasPermission("doc.emetti.assicurazione")) {
+        if (p.hasPermission(Docs.getInstance().getConfig().getString("permissions.assicurazione"))) {
             if (target.isOnline()) {
                 p.sendMessage(utils.cc("&aHai creato un'assicurazione a " + target.getName().toString() + " con successo."));
                 target.sendMessage(utils.cc("&aHai ricevuto l'assicurazione"));

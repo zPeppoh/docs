@@ -18,7 +18,6 @@ public final class Docs extends JavaPlugin {
         instance = this;
         Docs.getInstance().getCommand("doc").setExecutor((CommandExecutor)new docCommand());
         Bukkit.getLogger().info("docs avviato con successo");
-
     }
 
     @Override
