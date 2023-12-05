@@ -1,5 +1,6 @@
 package it.zpeppoh.docs.commands;
 
+import com.google.common.collect.Lists;
 import it.zpeppoh.docs.Docs;
 import it.zpeppoh.docs.enums.Enum;
 import net.kyori.adventure.text.Component;
@@ -9,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -17,11 +19,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static it.zpeppoh.docs.utils.utils.cc;
 
-public class docCommand implements CommandExecutor {
+public class docCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -128,7 +131,21 @@ public class docCommand implements CommandExecutor {
     }
 
     @Nullable
+    public List<String> tabCompleter(@NotNull CommandSender sender, @NotNull List<String> args) {
+        if (args.size() == 1)
+            return Lists.newArrayList("patente", "libretto", "assicurazione");
+        return Lists.newArrayList();
+    }
+
+    @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return null;
+        List<String> completions = new ArrayList<>();
+
+        if (args.length == 1) {
+            completions.add("patente");
+            completions.add("libretto");
+            completions.add("assicurazione");
+        }
+        return completions;
     }
 }
